@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="To-do-List App"
+        app:layout_constraintBottom_toTopOf="@+id/taskTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/taskTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:hint="New Task Title"
+        android:inputType="text"
+        android:minWidth="100dp"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/inputEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/inputEditText"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/border"
+        android:gravity="start|top"
+        android:hint="Enter description here"
+        android:inputType="textMultiLine"
+        android:minHeight="48dp"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.592"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/delete" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="93dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/background"
+        android:backgroundTint="#FFF1D9"
+        android:text="Delete"
+        android:textColor="#BF360C"
+        app:backgroundTint="@color/cardBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="28dp"
+        android:background="@color/cardBackground"
+        android:text="Cancel"
+        android:textColor="#BF360C"
+        app:backgroundTint="@color/cardBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/save"
+        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:background="@color/cardBackground"
+        android:text="Save"
+        android:textColor="#BF360C"
+        app:backgroundTint="@color/cardBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.851"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/dateReminderbtn"
+        android:layout_width="123dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/border"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.077"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText">
+
+        <TextView
+            android:id="@+id/remindertxt"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Set Reminder Date"
+            android:textSize="11sp" />
+
+        <ImageView
+            android:id="@+id/calendarImg1"
+            android:layout_width="11dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dateDuebtn"
+        android:layout_width="123dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="84dp"
+        android:layout_weight="1"
+        android:background="@drawable/border"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.076"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText">
+
+        <TextView
+            android:id="@+id/duetxt"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Set Due Date"
+            android:textSize="11sp" />
+
+        <ImageView
+            android:id="@+id/calendarImg2"
+            android:layout_width="11dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/reminderDatetxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.149"
+        app:layout_constraintStart_toEndOf="@+id/dateReminderbtn"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText" />
+
+    <TextView
+        android:id="@+id/dueDatetxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintStart_toEndOf="@+id/dateReminderbtn"
+        app:layout_constraintTop_toBottomOf="@+id/inputEditText"
+        tools:text="2020-10-08 10:58 am" />
+</androidx.constraintlayout.widget.ConstraintLayout>
