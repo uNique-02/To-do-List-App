@@ -1,25 +1,40 @@
 package com.example.myapplication
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.ClipDescription
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.TimePicker
+import android.widget.*
 import androidx.fragment.app.DialogFragment
+import com.example.myapplication.model.Task
+import com.example.myapplication.model.TaskModel
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 class NewtaskActivity : AppCompatActivity() {
 
+    lateinit var titleView:EditText
+    lateinit var descriptionView: EditText
     lateinit var reminderDateText: TextView
     lateinit var dueDateText: TextView
+
+
+    var titleInput:String=""
+    var descriptionInput:String=""
+    lateinit var reminderDateInput:Date
+    lateinit var dueDateInput:Date
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newtask)
@@ -27,15 +42,24 @@ class NewtaskActivity : AppCompatActivity() {
         var date: String = ""
         var time: String = ""
 
+        titleView = findViewById(R.id.taskTitle)
+        descriptionView = findViewById(R.id.taskDescription)
+/*
+        val resultIntent = Intent()
+        var list = (resultIntent.getSerializableExtra("array") as? ArrayList<TaskModel>)!!
+            Log.e("Array list size", list?.size.toString())
+
+*/
+
         reminderDateText = findViewById(R.id.reminderDatetxt)
         val reminderDatePickerBtn = findViewById<LinearLayout>(R.id.dateReminderbtn)
         reminderDatePickerBtn.setOnClickListener(){
-           showDatePickerDialog(reminderDateText)
+           showDatePickerDialog(reminderDateText, 0)
         }
         dueDateText = findViewById(R.id.dueDatetxt)
         val dueDatePickerBtn = findViewById<LinearLayout>(R.id.dateDuebtn)
         dueDatePickerBtn.setOnClickListener(){
-            showDatePickerDialog(dueDateText)
+            showDatePickerDialog(dueDateText, 1)
         }
         val cancelBtn = findViewById<Button>(R.id.cancel)
         cancelBtn.setOnClickListener(){
@@ -44,12 +68,40 @@ class NewtaskActivity : AppCompatActivity() {
         }
         val saveBtn = findViewById<Button>(R.id.save)
         saveBtn.setOnClickListener(){
+
+            titleInput = titleView.text.toString()
+            descriptionInput = descriptionView.text.toString()
+
+            Log.e("Description", descriptionInput)
+            Log.e("Title", titleInput)
+
+        if(descriptionInput!="" || titleInput!="" || dueDateInput!=null){
+            var task = TaskModel(titleInput, descriptionInput, reminderDateInput, dueDateInput, 0)
+            Log.e("REMINDER",reminderDateInput.toString())
+            Log.e("DUE",dueDateInput.toString())
+            /*Log.e("Array list size", list.size.toString())
+            list.add(task)
+            Log.e("Array list size", list.size.toString())
+            if(list.size>1){
+                Log.e("ArrayList", list[list.size-1].toString())
+
+            resultIntent.putParcelableArrayListExtra("array", list)
+
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
+            }*/
+
+
+        }
             val intentNew = Intent(this, MainActivity::class.java)
             startActivity(intentNew)
+
+
+
         }
     }
 
-    fun showDatePickerDialog(view:TextView){
+    fun showDatePickerDialog(view:TextView, binary:Int){
         val calendar = Calendar.getInstance()
         var date:String = ""
         var time: String = ""
@@ -61,9 +113,14 @@ class NewtaskActivity : AppCompatActivity() {
             selectedDate.set(year, monthOfYear, dayOfMonth)
             // Handle the selected date here
             val formattedDate = "${selectedDate.get(Calendar.YEAR)}-${selectedDate.get(Calendar.MONTH) + 1}-${selectedDate.get(Calendar.DAY_OF_MONTH)}"
-            Log.e("KIM NQIUE", formattedDate)
+
             view.setText(formattedDate)
-            showTimePickerDialog(view)
+            if(binary==0){
+                reminderDateInput = Date(selectedDate.get(Calendar.YEAR) - 1900, selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH))
+            }else{
+                dueDateInput = Date(selectedDate.get(Calendar.YEAR) - 1900, selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH))
+            }
+             showTimePickerDialog(view, binary)
         },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
@@ -73,7 +130,7 @@ class NewtaskActivity : AppCompatActivity() {
         dateDialog.show()
     }
 
-    fun showTimePickerDialog(view: TextView){
+    fun showTimePickerDialog(view: TextView, binary:Int){
         val calendar = Calendar.getInstance()
         var time: String = ""
         var selectedTime = Calendar.getInstance()
@@ -91,6 +148,16 @@ class NewtaskActivity : AppCompatActivity() {
                     "PM"
                 }
                 time = hourOfDay.toString() + ":" + minute.toString() + " " + amPm
+
+                if(binary==0){
+                    reminderDateInput.hours = selectedTime.get(Calendar.HOUR_OF_DAY)
+                    reminderDateInput.minutes = selectedTime.get(Calendar.MINUTE)
+                }else{
+                    dueDateInput.hours = selectedTime.get(Calendar.HOUR_OF_DAY)
+                    dueDateInput.minutes = selectedTime.get(Calendar.MINUTE)
+                }
+
+                    //LocalTime.parse(time, formatter)
                 view.setText(view.text.toString() + " " + time)
             },
             calendar.get(Calendar.HOUR_OF_DAY),
@@ -101,4 +168,16 @@ class NewtaskActivity : AppCompatActivity() {
     }
 
 }
+
+/*
+private fun Intent.putParcelableArrayListExtra(key: String, arrayList: ArrayList<TaskModel>) {
+    val parcelableArray = arrayList.toTypedArray().apply {
+        putExtra(key, this)
+    }
+}*/
+
+
+
+
+
 
