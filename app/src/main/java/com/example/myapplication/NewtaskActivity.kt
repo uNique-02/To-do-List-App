@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.ClipDescription
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,8 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.myapplication.model.Task
 import com.example.myapplication.model.TaskModel
+import com.example.myapplication.utils.DatabaseHandler
+import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -34,6 +37,8 @@ class NewtaskActivity : AppCompatActivity() {
     lateinit var reminderDateInput:Date
     lateinit var dueDateInput:Date
 
+    lateinit var activityMain: MainActivity
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +49,6 @@ class NewtaskActivity : AppCompatActivity() {
 
         titleView = findViewById(R.id.taskTitle)
         descriptionView = findViewById(R.id.taskDescription)
-/*
-        val resultIntent = Intent()
-        var list = (resultIntent.getSerializableExtra("array") as? ArrayList<TaskModel>)!!
-            Log.e("Array list size", list?.size.toString())
-
-*/
 
         reminderDateText = findViewById(R.id.reminderDatetxt)
         val reminderDatePickerBtn = findViewById<LinearLayout>(R.id.dateReminderbtn)
@@ -71,25 +70,19 @@ class NewtaskActivity : AppCompatActivity() {
 
             titleInput = titleView.text.toString()
             descriptionInput = descriptionView.text.toString()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
             Log.e("Description", descriptionInput)
             Log.e("Title", titleInput)
 
         if(descriptionInput!="" || titleInput!="" || dueDateInput!=null){
-            var task = TaskModel(titleInput, descriptionInput, reminderDateInput, dueDateInput, 0)
-            Log.e("REMINDER",reminderDateInput.toString())
-            Log.e("DUE",dueDateInput.toString())
-            /*Log.e("Array list size", list.size.toString())
-            list.add(task)
-            Log.e("Array list size", list.size.toString())
-            if(list.size>1){
-                Log.e("ArrayList", list[list.size-1].toString())
+            var task = TaskModel(titleInput, descriptionInput, dateFormat.format(reminderDateInput), dateFormat.format(dueDateInput), 0, 0)
+           // Log.e("REMINDER",dateFormat.format(reminderDateInput))
+           // Log.e("DUE",dateFormat.format(dueDateInput))
 
-            resultIntent.putParcelableArrayListExtra("array", list)
+            var db = DatabaseHandler(applicationContext)
+                db.insert(task)
 
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
-            }*/
 
 
         }

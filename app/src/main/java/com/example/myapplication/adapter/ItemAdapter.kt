@@ -10,8 +10,9 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.model.Task
+import com.example.myapplication.model.TaskModel
 
-class ItemAdapter(private val context: Context, private val dataset: List<Task>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(private val context: Context, private val dataset: List<TaskModel>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         //val cardView: CardView = view.findViewById(R.id.item_title)
@@ -28,8 +29,7 @@ class ItemAdapter(private val context: Context, private val dataset: List<Task>)
 
     override fun onBindViewHolder(holder: ItemAdapter.ItemViewHolder, position: Int) {
         val item = dataset[position]
-        holder.checkBox.text = context.resources.getString(item.stringResourceId)
-
+            holder.checkBox.text = (item.getTitle())
     }
 
     override fun getItemCount(): Int {
