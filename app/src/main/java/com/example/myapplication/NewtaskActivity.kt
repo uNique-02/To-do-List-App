@@ -76,7 +76,7 @@ class NewtaskActivity : AppCompatActivity() {
             Log.e("Title", titleInput)
 
         if(descriptionInput!="" || titleInput!="" || dueDateInput!=null){
-            var task = TaskModel(titleInput, descriptionInput, dateFormat.format(reminderDateInput), dateFormat.format(dueDateInput), 0, 0)
+            var task = TaskModel(titleInput, descriptionInput, dateFormat.format(reminderDateInput), dateFormat.format(dueDateInput), 1, 0)
            // Log.e("REMINDER",dateFormat.format(reminderDateInput))
            // Log.e("DUE",dateFormat.format(dueDateInput))
 

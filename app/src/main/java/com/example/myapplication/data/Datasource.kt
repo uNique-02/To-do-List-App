@@ -13,13 +13,10 @@ class Datasource {
         this.db = db
     }
 
-    fun loadTasks(): List<TaskModel> {
+    fun loadINPTasks(mark: Int): List<TaskModel> {
 
-        var list = db.retreiveTask()
+        var list = db.retreiveTask(mark)
 
-       // Log.e("Database name", db.databaseName)
-       // Log.e("Task Title", "KIM CUTE - main Datasource")
-       // Log.e("List size", list.size.toString())
         return list
     }
 }

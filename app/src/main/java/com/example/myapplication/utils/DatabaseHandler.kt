@@ -70,7 +70,7 @@ class DatabaseHandler : SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public fun retreiveTask(): List<TaskModel>{
+    public fun retreiveTask(mark: Int): List<TaskModel>{
         var taskList: ArrayList<TaskModel> =  ArrayList<TaskModel>()
         var cursorV: Cursor? = null
 
@@ -78,7 +78,12 @@ class DatabaseHandler : SQLiteOpenHelper {
         db.beginTransaction()
             try {
                 Log.e("prompt", "Entered retreive task function - try")
-                cursorV = db.query(TODO_TABLE, null, null, null, null, null, null, null)
+                if(mark==0){
+                    cursorV = db.query(TODO_TABLE, null, MARK + "=0", null, null, null, null, null)
+                }else{
+                    cursorV = db.query(TODO_TABLE, null, null, null, MARK, MARK + "== 1", null, null)
+
+                }
                 if (cursorV != null) {
                     Log.e("prompt", "Entered retreive task function - try if")
                     if (cursorV.moveToFirst()) {
@@ -103,7 +108,7 @@ class DatabaseHandler : SQLiteOpenHelper {
                            // new.let { Log.e("Task description", it.getDescription()) }
                            // new.setMark(cursorV.getInt(cursorV.getColumnIndex(MARK)))
                             new.let { taskList.add(it)
-                                Log.e("Task Title", "KIM CUTE")
+                                Log.e("Task Title", new.getTitle())
                                 Log.e("Task description", new.getDescription())
                                 Log.e("reminder date", new.getReminder())
 
