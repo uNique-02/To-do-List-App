@@ -1,28 +1,20 @@
 package com.example.myapplication
 
-import android.app.Activity
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.app.TimePickerDialog
-import android.content.ClipDescription
-import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
-import android.text.format.DateFormat
 import android.util.Log
-import android.view.View
 import android.widget.*
-import androidx.fragment.app.DialogFragment
-import com.example.myapplication.model.Task
+import androidx.annotation.RequiresApi
 import com.example.myapplication.model.TaskModel
 import com.example.myapplication.utils.DatabaseHandler
 import java.text.SimpleDateFormat
-import java.time.LocalTime
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
 class NewtaskActivity : AppCompatActivity() {
 
@@ -40,6 +32,7 @@ class NewtaskActivity : AppCompatActivity() {
     lateinit var activityMain: MainActivity
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newtask)
@@ -81,11 +74,19 @@ class NewtaskActivity : AppCompatActivity() {
                     descriptionInput,
                     dateFormat.format(reminderDateInput),
                     dateFormat.format(dueDateInput),
-                    1,
+                    0,
                     0
                 )
                 // Log.e("REMINDER",dateFormat.format(reminderDateInput))
                 // Log.e("DUE",dateFormat.format(dueDateInput))
+
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                val dateTime = LocalDateTime.parse(task.getDue(), formatter)
+
+                Log.e("DATE-TIME", dateTime.toString() + " " +LocalDateTime.now())
+                if(dateTime.isBefore(LocalDateTime.now())){
+                    task.setMark(2)
+                }
 
                 var db = DatabaseHandler(applicationContext)
                 db.insert(task)

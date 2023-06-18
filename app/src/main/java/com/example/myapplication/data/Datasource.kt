@@ -1,8 +1,5 @@
 package com.example.myapplication.data
 
-import android.util.Log
-import com.example.myapplication.R
-import com.example.myapplication.model.Task
 import com.example.myapplication.model.TaskModel
 import com.example.myapplication.utils.DatabaseHandler
 
