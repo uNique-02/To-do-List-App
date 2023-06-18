@@ -7,11 +7,12 @@ import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.adapter.ItemAdapter
 import com.example.myapplication.data.Datasource
+import com.example.myapplication.model.Task
 import com.example.myapplication.model.TaskModel
 import com.example.myapplication.utils.DatabaseHandler
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ItemAdapter.OnItemCheckedListener {
     var list:ArrayList<TaskModel> = ArrayList<TaskModel>()
     private lateinit var db: DatabaseHandler
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +20,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
+        loadUI()
+    }
+
+    fun loadUI(){
         //open database and laod tasks to the recycler view
         db = DatabaseHandler(this)
         db.openDB()
@@ -40,12 +45,14 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView1 = findViewById<RecyclerView>(R.id.recyclerView1)
         val recyclerView2 = findViewById<RecyclerView>(R.id.recyclerView2)
-        recyclerView1.adapter = ItemAdapter(this, myInPDataset)
-        print("After adapter ")
+        var adapter1 = ItemAdapter(this, myInPDataset)
+        adapter1.setOnItemCheckedListener(this as ItemAdapter.OnItemCheckedListener)
+        recyclerView1.adapter = adapter1
         recyclerView1.setHasFixedSize(true)
 
-        recyclerView2.adapter = ItemAdapter(this, myCompletedDataset)
-        print("After adapter ")
+        var adapter2 = ItemAdapter(this, myCompletedDataset)
+        adapter2.setOnItemCheckedListener(this as ItemAdapter.OnItemCheckedListener)
+        recyclerView2.adapter = adapter2
         recyclerView2.setHasFixedSize(true)
 
         val newTaskBtn = findViewById<FloatingActionButton>(R.id.newTaskBtn)
@@ -56,7 +63,15 @@ class MainActivity : AppCompatActivity() {
             intentNew.putExtra("array", list)
             startActivityForResult(intentNew, requestCode)
         }
+    }
 
+    override fun onItemChecked(todoItems: List<TaskModel>, position: Int, isChecked: Boolean) {
+        var mark = if (isChecked) 1 else 0
+        db.updateMark(todoItems[position].getStringResourceID(), mark)
+
+        Log.e("CLICKED", "CLICKEC CLICKED CLIEKC LCIEKC LKCE")
+        Log.e("Checked checkbox", todoItems[position].getTitle())
+        loadUI()
     }
 
 }

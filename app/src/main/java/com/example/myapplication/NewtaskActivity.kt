@@ -26,16 +26,16 @@ import kotlin.collections.ArrayList
 
 class NewtaskActivity : AppCompatActivity() {
 
-    lateinit var titleView:EditText
+    lateinit var titleView: EditText
     lateinit var descriptionView: EditText
     lateinit var reminderDateText: TextView
     lateinit var dueDateText: TextView
 
 
-    var titleInput:String=""
-    var descriptionInput:String=""
-    lateinit var reminderDateInput:Date
-    lateinit var dueDateInput:Date
+    var titleInput: String = ""
+    var descriptionInput: String = ""
+    lateinit var reminderDateInput: Date
+    lateinit var dueDateInput: Date
 
     lateinit var activityMain: MainActivity
 
@@ -52,21 +52,21 @@ class NewtaskActivity : AppCompatActivity() {
 
         reminderDateText = findViewById(R.id.reminderDatetxt)
         val reminderDatePickerBtn = findViewById<LinearLayout>(R.id.dateReminderbtn)
-        reminderDatePickerBtn.setOnClickListener(){
-           showDatePickerDialog(reminderDateText, 0)
+        reminderDatePickerBtn.setOnClickListener() {
+            showDatePickerDialog(reminderDateText, 0)
         }
         dueDateText = findViewById(R.id.dueDatetxt)
         val dueDatePickerBtn = findViewById<LinearLayout>(R.id.dateDuebtn)
-        dueDatePickerBtn.setOnClickListener(){
+        dueDatePickerBtn.setOnClickListener() {
             showDatePickerDialog(dueDateText, 1)
         }
         val cancelBtn = findViewById<Button>(R.id.cancel)
-        cancelBtn.setOnClickListener(){
+        cancelBtn.setOnClickListener() {
             val intentNew = Intent(this, MainActivity::class.java)
             startActivity(intentNew)
         }
         val saveBtn = findViewById<Button>(R.id.save)
-        saveBtn.setOnClickListener(){
+        saveBtn.setOnClickListener() {
 
             titleInput = titleView.text.toString()
             descriptionInput = descriptionView.text.toString()
@@ -75,46 +75,63 @@ class NewtaskActivity : AppCompatActivity() {
             Log.e("Description", descriptionInput)
             Log.e("Title", titleInput)
 
-        if(descriptionInput!="" || titleInput!="" || dueDateInput!=null){
-            var task = TaskModel(titleInput, descriptionInput, dateFormat.format(reminderDateInput), dateFormat.format(dueDateInput), 1, 0)
-           // Log.e("REMINDER",dateFormat.format(reminderDateInput))
-           // Log.e("DUE",dateFormat.format(dueDateInput))
+            if (descriptionInput != "" || titleInput != "" || dueDateInput != null) {
+                var task = TaskModel(
+                    titleInput,
+                    descriptionInput,
+                    dateFormat.format(reminderDateInput),
+                    dateFormat.format(dueDateInput),
+                    1,
+                    0
+                )
+                // Log.e("REMINDER",dateFormat.format(reminderDateInput))
+                // Log.e("DUE",dateFormat.format(dueDateInput))
 
-            var db = DatabaseHandler(applicationContext)
+                var db = DatabaseHandler(applicationContext)
                 db.insert(task)
 
 
-
-        }
+            }
             val intentNew = Intent(this, MainActivity::class.java)
             startActivity(intentNew)
-
 
 
         }
     }
 
-    fun showDatePickerDialog(view:TextView, binary:Int){
+    fun showDatePickerDialog(view: TextView, binary: Int) {
         val calendar = Calendar.getInstance()
-        var date:String = ""
+        var date: String = ""
         var time: String = ""
         var selectedDate: Calendar = Calendar.getInstance()
         var selectedTime: Calendar = Calendar.getInstance()
-        val dateDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            // Do something with the selected date
-            selectedDate = Calendar.getInstance()
-            selectedDate.set(year, monthOfYear, dayOfMonth)
-            // Handle the selected date here
-            val formattedDate = "${selectedDate.get(Calendar.YEAR)}-${selectedDate.get(Calendar.MONTH) + 1}-${selectedDate.get(Calendar.DAY_OF_MONTH)}"
+        val dateDialog = DatePickerDialog(
+            this, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                // Do something with the selected date
+                selectedDate = Calendar.getInstance()
+                selectedDate.set(year, monthOfYear, dayOfMonth)
+                // Handle the selected date here
+                val formattedDate =
+                    "${selectedDate.get(Calendar.YEAR)}-${selectedDate.get(Calendar.MONTH) + 1}-${
+                        selectedDate.get(Calendar.DAY_OF_MONTH)
+                    }"
 
-            view.setText(formattedDate)
-            if(binary==0){
-                reminderDateInput = Date(selectedDate.get(Calendar.YEAR) - 1900, selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH))
-            }else{
-                dueDateInput = Date(selectedDate.get(Calendar.YEAR) - 1900, selectedDate.get(Calendar.MONTH), selectedDate.get(Calendar.DAY_OF_MONTH))
-            }
-             showTimePickerDialog(view, binary)
-        },
+                view.setText(formattedDate)
+                if (binary == 0) {
+                    reminderDateInput = Date(
+                        selectedDate.get(Calendar.YEAR) - 1900,
+                        selectedDate.get(Calendar.MONTH),
+                        selectedDate.get(Calendar.DAY_OF_MONTH)
+                    )
+                } else {
+                    dueDateInput = Date(
+                        selectedDate.get(Calendar.YEAR) - 1900,
+                        selectedDate.get(Calendar.MONTH),
+                        selectedDate.get(Calendar.DAY_OF_MONTH)
+                    )
+                }
+                showTimePickerDialog(view, binary)
+            },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
@@ -123,7 +140,7 @@ class NewtaskActivity : AppCompatActivity() {
         dateDialog.show()
     }
 
-    fun showTimePickerDialog(view: TextView, binary:Int){
+    fun showTimePickerDialog(view: TextView, binary: Int) {
         val calendar = Calendar.getInstance()
         var time: String = ""
         var selectedTime = Calendar.getInstance()
@@ -142,15 +159,15 @@ class NewtaskActivity : AppCompatActivity() {
                 }
                 time = hourOfDay.toString() + ":" + minute.toString() + " " + amPm
 
-                if(binary==0){
+                if (binary == 0) {
                     reminderDateInput.hours = selectedTime.get(Calendar.HOUR_OF_DAY)
                     reminderDateInput.minutes = selectedTime.get(Calendar.MINUTE)
-                }else{
+                } else {
                     dueDateInput.hours = selectedTime.get(Calendar.HOUR_OF_DAY)
                     dueDateInput.minutes = selectedTime.get(Calendar.MINUTE)
                 }
 
-                    //LocalTime.parse(time, formatter)
+                //LocalTime.parse(time, formatter)
                 view.setText(view.text.toString() + " " + time)
             },
             calendar.get(Calendar.HOUR_OF_DAY),

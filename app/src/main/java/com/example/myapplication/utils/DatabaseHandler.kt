@@ -1,6 +1,7 @@
 package com.example.myapplication.utils
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -32,11 +33,13 @@ class DatabaseHandler : SQLiteOpenHelper {
 
 
     var db: SQLiteDatabase = this.readableDatabase
+
     constructor(
         context: Context?
     ) : super(context, NAME, null, VERSION) {
 
     }
+
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(CREATE_TODO_TABLE)
         this.db = db!!
@@ -47,11 +50,11 @@ class DatabaseHandler : SQLiteOpenHelper {
         onCreate(db)
     }
 
-    public fun openDB(){
+    public fun openDB() {
         db = this.writableDatabase
     }
 
-    public fun insert(task: TaskModel){
+    public fun insert(task: TaskModel) {
 
         var cv = ContentValues()
         cv.put(TASK_TITLE, task.getTitle())
@@ -62,7 +65,7 @@ class DatabaseHandler : SQLiteOpenHelper {
 
         var id = getBottomMostEntry();
         Log.e("HAPHAZARDLY", id.toString())
-        task.setStringResourceID(id+7);
+        task.setStringResourceID(id + 7);
 
         db.insert(TODO_TABLE, null, cv)
 
@@ -70,73 +73,78 @@ class DatabaseHandler : SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public fun retreiveTask(mark: Int): List<TaskModel>{
-        var taskList: ArrayList<TaskModel> =  ArrayList<TaskModel>()
+    public fun retreiveTasks(mark: Int): List<TaskModel> {
+        var taskList: ArrayList<TaskModel> = ArrayList<TaskModel>()
         var cursorV: Cursor? = null
 
         Log.e("prompt", "Entered retreive task function")
         db.beginTransaction()
-            try {
-                Log.e("prompt", "Entered retreive task function - try")
-                if(mark==0){
-                    cursorV = db.query(TODO_TABLE, null, MARK + "=0", null, null, null, null, null)
-                }else{
-                    cursorV = db.query(TODO_TABLE, null, null, null, MARK, MARK + "== 1", null, null)
+        try {
+            Log.e("prompt", "Entered retreive task function - try")
+            if (mark == 0) {
+                cursorV = db.query(TODO_TABLE, null, MARK + "=0", null, null, null, null, null)
+            } else {
+                cursorV = db.query(TODO_TABLE, null, MARK + "=1", null, null, null, null, null)
 
-                }
-                if (cursorV != null) {
-                    Log.e("prompt", "Entered retreive task function - try if")
-                    if (cursorV.moveToFirst()) {
-                        Log.e("prompt", "Entered retreive task function - try if if")
-                        do {
-                            Log.e("prompt", "Entered retreive task function - try if if do")
-                            var new:TaskModel = TaskModel("", "", "", "", 0, 0)
-                            new.setTitle(cursorV.getString(cursorV.getColumnIndex(TASK_TITLE)))
-                            new.setDescription(
-                                cursorV.getString(
-                                    cursorV.getColumnIndex(
-                                        TASK_DESCRIPTION
-                                    )
+            }
+            if (cursorV != null) {
+                Log.e("prompt", "Entered retreive task function - try if")
+                if (cursorV.moveToFirst()) {
+                    Log.e("prompt", "Entered retreive task function - try if if")
+                    do {
+                        Log.e("prompt", "Entered retreive task function - try if if do")
+                        var new: TaskModel = TaskModel("", "", "", "", 0, 0)
+                        new.setTitle(cursorV.getString(cursorV.getColumnIndex(TASK_TITLE)))
+                        new.setDescription(
+                            cursorV.getString(
+                                cursorV.getColumnIndex(
+                                    TASK_DESCRIPTION
                                 )
                             )
-                            new.setReminder(cursorV.getString(cursorV.getColumnIndex(REMINDER)))
-                            new.setDue(cursorV.getString(cursorV.getColumnIndex(DUE)))
-                            new.setMark((cursorV.getString(cursorV.getColumnIndex(MARK))).toInt())
-                            new.setStringResourceID((cursorV.getString(cursorV.getColumnIndex(ID))).toInt())
+                        )
+                        new.setReminder(cursorV.getString(cursorV.getColumnIndex(REMINDER)))
+                        new.setDue(cursorV.getString(cursorV.getColumnIndex(DUE)))
+                        new.setMark((cursorV.getString(cursorV.getColumnIndex(MARK))).toInt())
+                        new.setStringResourceID((cursorV.getString(cursorV.getColumnIndex(ID))).toInt())
 
-                           // new.let { Log.e("Task Title", it.getTitle()) }
-                           // new.let { Log.e("Task description", it.getDescription()) }
-                           // new.setMark(cursorV.getInt(cursorV.getColumnIndex(MARK)))
-                            new.let { taskList.add(it)
-                                Log.e("Task Title", new.getTitle())
-                                Log.e("Task description", new.getDescription())
-                                Log.e("reminder date", new.getReminder())
+                        // new.let { Log.e("Task Title", it.getTitle()) }
+                        // new.let { Log.e("Task description", it.getDescription()) }
+                        // new.setMark(cursorV.getInt(cursorV.getColumnIndex(MARK)))
+                        new.let {
+                            taskList.add(it)
+                            Log.e("Task Title", new.getTitle())
+                            Log.e("Task description", new.getDescription())
+                            Log.e("reminder date", new.getReminder())
 
-                            }
+                        }
 
-                        } while (cursorV.moveToNext())
-                    }
+                    } while (cursorV.moveToNext())
                 }
-            }finally {
-                db.endTransaction()
-                cursorV?.close()
             }
-            return taskList
+        } finally {
+            db.endTransaction()
+            cursorV?.close()
+        }
+        return taskList
     }
 
-    public fun updateMark(id:Int, mark:Int){
+    public fun updateMark(id: Int, mark: Int) {
         var cv = ContentValues()
         cv.put(MARK, mark)
         db.update(TODO_TABLE, cv, ID + "=?", arrayOf(id.toString()))
     }
 
-    public fun updateTask(id:Int, taskTitle:String){
+    public fun updateTask(id: Int, taskTitle: String, taskDescription: String, reminder: String, due: String, mark: Int) {
         var cv = ContentValues()
         cv.put(TASK_TITLE, taskTitle)
+        cv.put(TASK_DESCRIPTION, taskDescription)
+        cv.put(REMINDER, reminder)
+        cv.put(DUE, due)
+        cv.put(MARK, mark)
         db.update(TODO_TABLE, cv, ID + "=?", arrayOf(id.toString()))
     }
 
-    public fun deleteTask(id:Int){
+    public fun deleteTask(id: Int) {
         db.delete(TODO_TABLE, ID + "=?", arrayOf(id.toString()))
     }
 

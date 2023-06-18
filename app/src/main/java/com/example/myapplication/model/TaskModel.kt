@@ -3,14 +3,14 @@ package com.example.myapplication.model
 import java.io.Serializable
 import java.util.*
 
-class TaskModel:Serializable {
-    private var taskTitle:String
-    private var description:String
-    private var dateReminder:String
-    private var dateDue:String
-    private var mark:Int = 0
+class TaskModel : Serializable {
+    private var taskTitle: String
+    private var description: String
+    private var dateReminder: String
+    private var dateDue: String
+    private var mark: Int = 0
     private var stringResourceId: Int = 0
-
+    var isChecked: Boolean = true
 
     constructor(
         taskTitle: String,
@@ -27,43 +27,52 @@ class TaskModel:Serializable {
         this.mark = mark
         this.stringResourceId = stringResourceId
     }
-    fun getTitle():String{
+
+    fun getTitle(): String {
         return taskTitle
     }
-    fun setTitle(title:String){
-        taskTitle=title
+
+    fun setTitle(title: String) {
+        taskTitle = title
     }
 
-    fun getDescription():String{
+    fun getDescription(): String {
         return description
     }
-    fun setDescription(descriptionP:String){
-        description=descriptionP
+
+    fun setDescription(descriptionP: String) {
+        description = descriptionP
     }
 
-    fun getReminder():String{
+    fun getReminder(): String {
         return dateReminder
     }
-    fun setReminder(reminder:String){
-        dateReminder=reminder
+
+    fun setReminder(reminder: String) {
+        dateReminder = reminder
     }
 
-    fun getDue():String{
+    fun getDue(): String {
         return dateDue
     }
-    fun setDue(due:String){
-        dateDue=due
+
+    fun setDue(due: String) {
+        dateDue = due
     }
-    fun getMark():Int{
+
+    fun getMark(): Int {
         return mark
     }
-    fun setMark(markP:Int){
+
+    fun setMark(markP: Int) {
         mark = markP
     }
-    fun getStringResourceID(): Int{
+
+    fun getStringResourceID(): Int {
         return stringResourceId
     }
-    fun setStringResourceID(id: Int){
+
+    fun setStringResourceID(id: Int) {
         stringResourceId = id
     }
 
