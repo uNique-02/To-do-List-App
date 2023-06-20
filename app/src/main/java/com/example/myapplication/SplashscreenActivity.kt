@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import androidx.core.os.HandlerCompat.postDelayed
+import com.example.myapplication.activities.MainActivity
 
 class SplashscreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

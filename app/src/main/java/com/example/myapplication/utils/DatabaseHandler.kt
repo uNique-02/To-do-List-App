@@ -1,16 +1,12 @@
 package com.example.myapplication.utils
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.database.DatabaseErrorHandler
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
-import androidx.room.Room
-import com.example.myapplication.MainActivity
 import com.example.myapplication.model.TaskModel
 
 class DatabaseHandler : SQLiteOpenHelper {
@@ -37,15 +33,17 @@ class DatabaseHandler : SQLiteOpenHelper {
     constructor(
         context: Context?
     ) : super(context, NAME, null, VERSION) {
-
+        this.openDB()
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(CREATE_TODO_TABLE)
+        //add non-null asserted call
         this.db = db!!
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, VERSION1: Int, VERSION2: Int) {
+        //use a safe call of the instance of the database
         db?.execSQL("DROP TABLE IF EXISTS" + TODO_TABLE)
         onCreate(db)
     }
@@ -63,12 +61,15 @@ class DatabaseHandler : SQLiteOpenHelper {
         cv.put(REMINDER, task.getReminder())
         cv.put(DUE, task.getDue())
 
+        //call getBottomMostEntry() to get the last ID used in the database
+        // that will be used as the ID of the task that will be inserted
         var id = getBottomMostEntry();
         Log.e("HAPHAZARDLY", id.toString())
         task.setStringResourceID(id + 7);
 
         db.insert(TODO_TABLE, null, cv)
 
+        //never forget to close the database for proetction and optimization
         db.close()
     }
 
@@ -81,18 +82,18 @@ class DatabaseHandler : SQLiteOpenHelper {
         db.beginTransaction()
         try {
             Log.e("prompt", "Entered retreive task function - try")
-            if (mark == 0) {
-                cursorV = db.query(TODO_TABLE, null, MARK + "=0", null, null, null, null, null)
-            } else {
+           // if (mark == 0) {
+                cursorV = db.query(TODO_TABLE, null, MARK + "=" + mark, null, null, null, null, null)
+           /* } else {
                 cursorV = db.query(TODO_TABLE, null, MARK + "=1", null, null, null, null, null)
 
-            }
+            }*/
             if (cursorV != null) {
-                Log.e("prompt", "Entered retreive task function - try if")
+ //               Log.e("prompt", "Entered retreive task function - try if")
                 if (cursorV.moveToFirst()) {
-                    Log.e("prompt", "Entered retreive task function - try if if")
+ //                   Log.e("prompt", "Entered retreive task function - try if if")
                     do {
-                        Log.e("prompt", "Entered retreive task function - try if if do")
+ //                       Log.e("prompt", "Entered retreive task function - try if if do")
                         var new: TaskModel = TaskModel("", "", "", "", 0, 0)
                         new.setTitle(cursorV.getString(cursorV.getColumnIndex(TASK_TITLE)))
                         new.setDescription(
@@ -112,9 +113,9 @@ class DatabaseHandler : SQLiteOpenHelper {
                         // new.setMark(cursorV.getInt(cursorV.getColumnIndex(MARK)))
                         new.let {
                             taskList.add(it)
-                            Log.e("Task Title", new.getTitle())
+                         /*   Log.e("Task Title", new.getTitle())
                             Log.e("Task description", new.getDescription())
-                            Log.e("reminder date", new.getReminder())
+                            Log.e("reminder date", new.getReminder())*/
 
                         }
 
@@ -129,9 +130,11 @@ class DatabaseHandler : SQLiteOpenHelper {
     }
 
     public fun updateMark(id: Int, mark: Int) {
+       // openDB()
         var cv = ContentValues()
         cv.put(MARK, mark)
         db.update(TODO_TABLE, cv, ID + "=?", arrayOf(id.toString()))
+        //db.close()
     }
 
     public fun updateTask(id: Int, taskTitle: String, taskDescription: String, reminder: String, due: String, mark: Int) {
@@ -145,6 +148,8 @@ class DatabaseHandler : SQLiteOpenHelper {
     }
 
     public fun deleteTask(id: Int) {
+        Log.e("Delete", "Entered delete")
+        Log.e("Delete ID value: ", id.toString())
         db.delete(TODO_TABLE, ID + "=?", arrayOf(id.toString()))
     }
 

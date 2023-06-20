@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="cardBackground">#FFE4B5</color>
     <color name="background">#FFF1D9</color>
+    <color name="error">#FF0000</color>
+    <color name="disabled">#989393</color>
 </resources>

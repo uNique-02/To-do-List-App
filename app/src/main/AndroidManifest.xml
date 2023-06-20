@@ -16,7 +16,7 @@
         >
 
         <activity
-            android:name=".NewtaskActivity"
+            android:name=".activities.NewtaskActivity"
             android:exported="false" />
         <activity
             android:name=".SplashscreenActivity"
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="true" />
     </application>
 

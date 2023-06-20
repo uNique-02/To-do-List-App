@@ -11,6 +11,8 @@ class CardModel {
         this.taskModelList = taskModelList
     }
 
+    //getters && setters
+
     fun getCategoryText(): String{
         return category
     }
