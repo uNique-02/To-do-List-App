@@ -10,6 +10,9 @@ class Datasource {
     constructor(db: DatabaseHandler) {
         this.db = db
     }
+    constructor(){
+
+    }
 
     fun loadINPTasks(mark: Int): List<TaskModel> {
 

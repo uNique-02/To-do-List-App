@@ -4,11 +4,14 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CardModel {
     var category: String = ""
-    var taskModelList: List<TaskModel>
+    lateinit var taskModelList: List<TaskModel>
 
     constructor(category: String, taskModelList: List<TaskModel>) {
         this.category = category
         this.taskModelList = taskModelList
+    }
+    constructor(){
+
     }
 
     //getters && setters
